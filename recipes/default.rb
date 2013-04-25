@@ -52,6 +52,20 @@ execute "bundle" do
   action :nothing
 end
 
+directory File.join(node.gdash.base, 'graph_templates', 'dashboards') do
+  action :nothing
+  recursive true
+end
+
+execute "gdash: untar" do
+  command "tar zxf #{node.gdash.tarfile} -C #{node.gdash.base} --strip-components=1"
+  creates File.join(node.gdash.base, "Gemfile.lock")
+  user "www-data"
+  group "www-data"
+  # notifies :create, resources(:ruby_block => "bundle_unicorn"), :immediately
+  notifies :delete, resources(:directory => File.join(node.gdash.base, 'graph_templates', 'dashboards')), :immediately
+end
+
 ruby_block "bundle_unicorn" do
   block do
     gemfile = Chef::Util::FileEdit.new(
@@ -65,21 +79,6 @@ ruby_block "bundle_unicorn" do
     File.exists?(File.join(node.gdash.base, 'Gemfile')) &&
     File.read(File.join(node.gdash.base, 'Gemfile')).include?('unicorn')
   end
-  action :nothing
-end
-
-directory File.join(node.gdash.base, 'graph_templates', 'dashboards') do
-  action :nothing
-  recursive true
-end
-
-execute "gdash: untar" do
-  command "tar zxf #{node.gdash.tarfile} -C #{node.gdash.base} --strip-components=1"
-  creates File.join(node.gdash.base, "Gemfile.lock")
-  user "www-data"
-  group "www-data"
-  notifies :create, resources(:ruby_block => "bundle_unicorn"), :immediately
-  notifies :delete, resources(:directory => File.join(node.gdash.base, 'graph_templates', 'dashboards')), :immediately
 end
 
 template File.join(node.gdash.base, "config", "gdash.yaml") do
@@ -89,7 +88,7 @@ template File.join(node.gdash.base, "config", "gdash.yaml") do
 end
 
 unicorn_config '/etc/unicorn/gdash.app' do
-  listen "\"#{node[:gdash][:interface]}:#{node[:gdash][:port]}\"" => {:backlog => 100}
+  listen '9292' => {:backlog => 100}
   working_directory node.gdash.base
   worker_timeout 60
   preload_app false

@@ -9,9 +9,9 @@ field '<%= name %>', <%= info.inspect %>
 <% end %>
 
 <% @lines.each do |line_hash| %>
-line <%= line_hash.inspect.gsub(/{|}/, '') %>
+line <%= line_hash.inspect %>
 <% end %>
 
 <% @forecasts.each_pair do |name, info| %>
 forecast '<%= name %>', <%= info.inspect %>
-<% end %>
+<% end %> 
