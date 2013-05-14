@@ -57,7 +57,12 @@ ALL_ROLES.each do |role|
   role_members = search("node", "role:#{role} AND chef_environment:#{node.chef_environment}") || []
   role_members << node if node.run_list.roles.include?(role)
 
-  role_members = role_members.sort_by { |m| m['hostname'] }
+  if role_members.nil?
+    # no members to process, move on gracefully
+    next
+  else
+    role_members = role_members.sort_by { |m| m['hostname'] }
+  end
 
   ############
   # Disk Usage
