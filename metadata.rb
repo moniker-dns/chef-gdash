@@ -1,3 +1,4 @@
+name             "gdash"
 maintainer       "Heavy Water Software Inc."
 maintainer_email "ops@hw-ops.com"
 license          "Apache 2.0"
@@ -13,9 +14,10 @@ recipe  "gdash::basic_dashboard", "Sets up simple dashboard, example LWRP usage"
   supports os
 end
 
-%w{ build-essential runit graphite unicorn }.each do |dep|
-  depends dep
-end
+depends "build-essential"
+depends "runit", "0.16.2"
+depends "graphite"
+depends "unicorn"
 
 suggests "iptables"
 
