@@ -54,7 +54,7 @@ ALL_ROLES = [
 
 
 ALL_ROLES.each do |role|
-  role_members = search("node", "role:#{role} AND chef_environment:#{node.chef_environment}") || []
+  role_members = search_helper("node", "role:#{role} AND chef_environment:#{node.chef_environment}", node[:gdash][:nodes])
   role_members << node if node.run_list.roles.include?(role)
 
   if role_members.nil?

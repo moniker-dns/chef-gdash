@@ -14,3 +14,4 @@ default.gdash.columns = 2
 default.gdash.graphite_whisperdb = "/opt/graphite/storage/whisper"
 default.gdash.port = 9292
 default.gdash.categories = []
+default.gdash.nodes = {}

@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
 
   # trigger an "apt-get update" as most cookbooks don't do this
   $chef_seed = <<SCRIPT
-  echo "deb http://15.185.118.80/public precise main" >> /etc/apt/sources.list.d/dnsaas.list
+  echo "deb http://15.185.118.80/public precise main" > /etc/apt/sources.list.d/chef-10.18.list
   wget -O -  http://15.185.118.80/public/archive.key | apt-key add -
   apt-get update
   DEBIAN_FRONTEND=noninteractive apt-get install --yes chef
@@ -75,7 +75,8 @@ SCRIPT
     }
 
     chef.run_list = [
-        "recipe[gdash::default]"
+        "recipe[gdash::default]",
+        "recipe[gdash::dashboards]"
     ]
   end
 end
