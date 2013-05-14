@@ -15,7 +15,7 @@ recipe  "gdash::basic_dashboard", "Sets up simple dashboard, example LWRP usage"
 end
 
 depends "build-essential"
-depends "runit", "0.16.2"
+depends "runit", "~> 1.1.4"
 depends "graphite"
 depends "unicorn"
 
