@@ -61,6 +61,7 @@ ALL_ROLES.each do |role|
     # no members to process, move on gracefully
     next
   else
+    Chef::Log.info(role_members)
     role_members = role_members.sort_by { |m| m['hostname'] }
   end
 
