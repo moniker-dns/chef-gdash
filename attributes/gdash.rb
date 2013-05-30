@@ -1,7 +1,7 @@
 default.gdash.tarfile = "/usr/src/gdash.tgz"
 default.gdash.base = "/srv/gdash"
 default.gdash.url = "https://github.com/ripienaar/gdash/tarball/master"
-default.gdash.graphite_url = "http://#{ipaddress}:80/"
+default.gdash.graphite_url = "http://#{node['ipaddress']}:80/"
 default.gdash.templatedir = "/srv/gdash/graph_templates"
 default.gdash.owner = "www-data"
 default.gdash.group = "www-data"
