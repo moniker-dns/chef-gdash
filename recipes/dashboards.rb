@@ -1,45 +1,5 @@
 include_recipe 'gdash'
 
-# gdash_dashboard 'Graphite Metrics' do
-#   category 'Graphite'
-#   description 'Graphite Metrics'
-# end
-
-# gdash_dashboard_component 'metrics_received' do
-#   dashboard_name 'Graphite Metrics'
-#   dashboard_category 'Graphite'
-#   vtitle 'Items'
-#   fields(
-#     :received => {
-#       :data => 'carbon.*.*.metricsReceived',
-#       :alias => 'Metrics Received'
-#     }
-#   )
-# end
-
-# gdash_dashboard_component 'cpu' do
-#   dashboard_name 'Graphite Metrics'
-#   dashboard_category 'Graphite'
-#   fields(
-#     :cpu => {
-#       :data => 'carbon.*.*.cpuUsage',
-#       :alias => 'CPU Usage'
-#     }
-#   )
-# end
-
-# gdash_dashboard_component 'memory' do
-#   dashboard_name 'Graphite Metrics'
-#   dashboard_category 'Graphite'
-
-#   fields(
-#     :memory => {
-#       :data => 'carbon.*.*.memUsage',
-#       :alias => 'Memory Usage'
-#     }
-#   )
-# end
-
 ALL_ROLES = [
   'chef',
   'graphite',
@@ -54,15 +14,15 @@ ALL_ROLES = [
 
 
 ALL_ROLES.each do |role|
-  role_members = search_helper("node", "role:#{role} AND chef_environment:#{node.chef_environment}", node[:gdash][:nodes])
-  role_members << node if node.run_list.roles.include?(role)
+  role_members = search_helper(:node, "role:#{role} AND chef_environment:#{node.chef_environment}", node[:gdash][:nodes], false)  do |role_member|
+    { 'hostname' => role_member[:hostname] }
+  end
+
+  Chef::Log.debug { "role_members = #{role_members}" }
 
   if role_members.nil?
     # no members to process, move on gracefully
     next
-  else
-    Chef::Log.info(role_members)
-    role_members = role_members.sort_by { |m| m['hostname'] }
   end
 
   ############
