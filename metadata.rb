@@ -18,7 +18,7 @@ depends "build-essential"
 depends "runit", "~> 1.1.4"
 depends "graphite"
 depends "unicorn"
-depends "search-helper"
+depends "search_helper"
 
 suggests "iptables"
 
